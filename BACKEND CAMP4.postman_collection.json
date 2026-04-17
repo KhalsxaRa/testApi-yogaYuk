@@ -1,0 +1,220 @@
+{
+  "info": {
+    "_postman_id": "03e4be3d-1291-4745-99f0-264a2ce7cd4f",
+    "name": "BACKEND CAMP4",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "33041331"
+  },
+  "item": [
+    {
+      "name": "Pengguna API",
+      "item": [
+        {
+          "name": "CREATE NEW PENGGUNA",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function(){",
+                  "    pm.response.to.have.status(201)",
+                  "})",
+                  "",
+                  "pm.test(\"Pengguna created\", function(){",
+                  "    const json = pm.response.json()",
+                  "    pm.expect(json).to.have.property(\"message\")",
+                  "    pm.expect(json).to.have.property(\"data\")",
+                  "    pm.expect(json.data).to.have.property(\"id_pengguna\")",
+                  "    pm.expect(json.data).to.have.property(\"nama\")",
+                  "    pm.expect(json.data).to.have.property(\"email\")",
+                  "    pm.expect(json.data).to.have.property(\"telepon\")",
+                  "",
+                  "    pm.environment.set(\"id_pengguna\", json.data.id_pengguna)",
+                  "    console.log(json.data.id_pengguna)",
+                  "})",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nama\": \"John Doe Test\",\n    \"email\": \"johndoe@example.com\",\n    \"telepon\": \"08123456789\",\n    \"passw\": \"password123\",\n    \"validasi_passw\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/pengguna",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+              "api",
+              "pengguna"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET PENGGUNA dengan limit  5 data per halaman" ,
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function(){",
+                  "    pm.response.to.have.status(200)",
+                  "})",
+                  "",
+                  "pm.test(\"response has pagination fields\", function(){",
+                  "    const json = pm.response.json()",
+                  "    pm.expect(json).to.have.property(\"message\")",
+                  "    pm.expect(json).to.have.property(\"page\")",
+                  "    pm.expect(json).to.have.property(\"limit\")",
+                  "    pm.expect(json).to.have.property(\"data\")",
+                  "})",
+                  "",
+                  "pm.test(\"data is an array\", function(){",
+                  "    const json = pm.response.json()",
+                  "    pm.expect(json.data).to.be.an(\"array\")",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/pengguna?page=1&limit=5",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "pengguna"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UPDATE PENGGUNA",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status code is 200\", function(){",
+                  "    pm.response.to.have.status(200)",
+                  "})",
+                  "",
+                  "pm.test(\"Pengguna updated\", function(){",
+                  "    const json = pm.response.json()",
+                  "    pm.expect(json).to.have.property(\"message\")",
+                  "    pm.expect(json).to.have.property(\"data\")",
+                  "    pm.expect(json.data).to.have.property(\"id_pengguna\")",
+                  "    pm.expect(json.data.nama).to.eql(\"John Doe Updated\")",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nama\": \"John Doe Updated\",\n    \"email\": \"johnupdated@example.com\",\n    \"telepon\": \"08129999999\",\n    \"passw\": \"newpass123\",\n    \"validasi_passw\": \"newpass123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/pengguna/{{id_pengguna}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "pengguna",
+                "{{id_pengguna}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE PENGGUNA",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function(){",
+                  "    pm.response.to.have.status(200)",
+                  "})",
+                  "",
+                  "pm.test(\"Delete message is correct\", function(){",
+                  "    const json = pm.response.json()",
+                  "    pm.expect(json).to.have.property(\"message\")",
+                  "    pm.expect(json.message).to.eql(\"Berhasil menghapus data pengguna\")",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/pengguna/{{id_pengguna}}",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "api",
+                "pengguna",
+                "{{id_pengguna}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "id_pengguna",
+      "value": ""
+    }
+  ]
+}
